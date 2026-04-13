@@ -327,6 +327,7 @@ export default function ProfilePage() {
   const [tagInput, setTagInput] = useState("");const [showNotifications, setShowNotifications] = useState(false);
 const [showSettings, setShowSettings] = useState(false);
 const [showMobileMenu, setShowMobileMenu] = useState(false);
+const [showMobileProfile, setShowMobileProfile] = useState(false);
 const [deletingAccount, setDeletingAccount] = useState(false);
 const [pushEnabled, setPushEnabled] = useState(false);
 const pushEnabledRef = useRef(false);
@@ -2244,23 +2245,28 @@ function openBoard(boardId: string, e?: React.MouseEvent<HTMLAnchorElement>, boa
             {/* Mobile dropdown menu */}
             {showMobileMenu && (
               <div className="absolute right-0 top-full z-50 mt-2 w-52 overflow-hidden rounded-2xl border border-slate-200 bg-white dark:bg-slate-900 dark:border-slate-700 shadow-lg sm:hidden">
-                <button type="button" className={`flex w-full items-center gap-3 px-4 py-3 text-sm transition hover:bg-slate-50 dark:hover:bg-slate-800 ${!showInbox && !showNotifications && !showSettings ? "font-semibold" : ""}`}
-                  onClick={() => { setShowInbox(false); setShowNotifications(false); setShowSettings(false); setActiveConversation(null); setShowMobileMenu(false); }}>
+                <button type="button" className={`flex w-full items-center gap-3 px-4 py-3 text-sm transition hover:bg-slate-50 dark:hover:bg-slate-800 ${showMobileProfile ? "font-semibold" : ""}`}
+                  onClick={() => { setShowMobileProfile(true); setShowInbox(false); setShowNotifications(false); setShowSettings(false); setActiveConversation(null); setShowMobileMenu(false); }}>
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" /></svg>Profile
+                </button>
+                <div className="border-t border-slate-100 dark:border-slate-700" />
+                <button type="button" className={`flex w-full items-center gap-3 px-4 py-3 text-sm transition hover:bg-slate-50 dark:hover:bg-slate-800 ${!showInbox && !showNotifications && !showSettings && !showMobileProfile ? "font-semibold" : ""}`}
+                  onClick={() => { setShowInbox(false); setShowNotifications(false); setShowSettings(false); setShowMobileProfile(false); setActiveConversation(null); setShowMobileMenu(false); }}>
                   <svg xmlns="http://www.w3.org/2000/svg" width={16} height={16} fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C6.49 2 2 6.49 2 12s4.49 10 10 10 10-4.49 10-10S17.51 2 12 2m0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8"/></svg>
                   Circlx
                 </button>
                 <button type="button" className={`flex w-full items-center justify-between gap-3 px-4 py-3 text-sm transition hover:bg-slate-50 dark:hover:bg-slate-800 ${showInbox ? "font-semibold" : ""}`}
-                  onClick={() => { const next = !showInbox; setShowInbox(next); setShowNotifications(false); setShowSettings(false); setActiveConversation(null); if (next && profile?.id) { conversationsPageRef.current = 0; loadConversations(profile.id, 0); } setShowMobileMenu(false); }}>
+                  onClick={() => { const next = !showInbox; setShowInbox(next); setShowNotifications(false); setShowSettings(false); setShowMobileProfile(false); setActiveConversation(null); if (next && profile?.id) { conversationsPageRef.current = 0; loadConversations(profile.id, 0); } setShowMobileMenu(false); }}>
                   <span className="flex items-center gap-3"><Inbox className="h-4 w-4" />Inbox</span>
                   {totalInboxBadge > 0 && <span className="inline-flex min-w-[20px] items-center justify-center rounded-full bg-red-500 px-1.5 py-0.5 text-[11px] font-medium text-white">{totalInboxBadge > 99 ? "99+" : totalInboxBadge}</span>}
                 </button>
                 <button type="button" className={`flex w-full items-center justify-between gap-3 px-4 py-3 text-sm transition hover:bg-slate-50 dark:hover:bg-slate-800 ${showNotifications ? "font-semibold" : ""}`}
-                  onClick={async () => { const next = !showNotifications; setShowNotifications(next); showNotificationsRef.current = next; setShowInbox(false); setShowSettings(false); setActiveConversation(null); if (next && profile?.id) { const prevLastViewed = localStorage.getItem(`notifications-last-viewed-${profile.id}`); setNotificationsLastViewedAt(prevLastViewed); notificationsPageRef.current = 0; await loadNotificationsForUser(profile.id, 0); markNotificationsAsViewed(); } setShowMobileMenu(false); }}>
+                  onClick={async () => { const next = !showNotifications; setShowNotifications(next); showNotificationsRef.current = next; setShowInbox(false); setShowSettings(false); setShowMobileProfile(false); setActiveConversation(null); if (next && profile?.id) { const prevLastViewed = localStorage.getItem(`notifications-last-viewed-${profile.id}`); setNotificationsLastViewedAt(prevLastViewed); notificationsPageRef.current = 0; await loadNotificationsForUser(profile.id, 0); markNotificationsAsViewed(); } setShowMobileMenu(false); }}>
                   <span className="flex items-center gap-3"><Bell className="h-4 w-4" />Notifications</span>
                   {unreadNotificationCount > 0 && <span className="inline-flex min-w-[20px] items-center justify-center rounded-full bg-red-500 px-1.5 py-0.5 text-[11px] font-medium text-white">{unreadNotificationCount > 99 ? "99+" : unreadNotificationCount}</span>}
                 </button>
                 <button type="button" className={`flex w-full items-center gap-3 px-4 py-3 text-sm transition hover:bg-slate-50 dark:hover:bg-slate-800 ${showSettings ? "font-semibold" : ""}`}
-                  onClick={() => { setShowSettings((prev) => !prev); setShowInbox(false); setShowNotifications(false); setActiveConversation(null); setShowMobileMenu(false); }}>
+                  onClick={() => { setShowSettings((prev) => !prev); setShowInbox(false); setShowNotifications(false); setShowMobileProfile(false); setActiveConversation(null); setShowMobileMenu(false); }}>
                   <Settings className="h-4 w-4" />Settings
                 </button>
                 <div className="border-t border-slate-100 dark:border-slate-700 px-4 py-3 flex items-center justify-between">
@@ -2331,10 +2337,50 @@ function openBoard(boardId: string, e?: React.MouseEvent<HTMLAnchorElement>, boa
         )}
 
         {profile && (
+          <div>
+          {/* Mobile profile view */}
+          {showMobileProfile && (
+            <div className="block sm:hidden mb-6">
+              <Card className="rounded-3xl border-0 shadow-sm">
+                <CardHeader><CardTitle>Account</CardTitle></CardHeader>
+                <CardContent className="space-y-4">
+                  <div className="flex flex-col items-center rounded-2xl bg-slate-100 dark:bg-zinc-900 p-6 text-center">
+                    <div className="relative">
+                      <Avatar className="h-20 w-20 overflow-hidden">
+                        {profile.avatar_url ? (
+                          <img src={profile.avatar_url} alt={profile.username} className="h-full w-full object-cover" />
+                        ) : (
+                          <AvatarFallback>{initials(profile.username)}</AvatarFallback>
+                        )}
+                      </Avatar>
+                      <label className="absolute bottom-0 right-0 cursor-pointer rounded-full bg-slate-800 p-1.5 text-white hover:bg-slate-600">
+                        {uploadingAvatar ? <Loader2 className="h-4 w-4 animate-spin" /> : <Camera className="h-4 w-4" />}
+                        <input type="file" accept="image/jpeg,image/png,image/webp" className="hidden" onChange={(e) => { const f = e.target.files?.[0]; if (f) uploadAvatar(f); }} />
+                      </label>
+                    </div>
+                    <p className="mt-3 text-sm font-semibold text-slate-900 dark:text-white">@{profile.username}</p>
+                    <p className="mt-0.5 text-xs text-slate-400">Member since {new Date(profile.created_at).toLocaleDateString([], { month: "long", year: "numeric" })}</p>
+                  </div>
+                  <div className="space-y-2">
+                    <label className="text-sm font-medium">Username</label>
+                    <Input value={username} onChange={(e) => setUsername(e.target.value.slice(0, 30))} className="rounded-2xl" />
+                  </div>
+                  <div className="space-y-1">
+                    <label className="text-sm font-medium">Short bio</label>
+                    <Input value={bio} onChange={(e) => setBio(e.target.value.slice(0, BIO_LIMIT))} className="rounded-2xl" />
+                    <div className="text-right text-xs text-slate-400">{bio.length}/{BIO_LIMIT}</div>
+                  </div>
+                  <Button onClick={saveProfile} disabled={saving} className="w-full rounded-2xl">
+                    {saving ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Save className="mr-2 h-4 w-4" />}Save
+                  </Button>
+                </CardContent>
+              </Card>
+            </div>
+          )}
           <div className="grid gap-6 lg:grid-cols-[320px_1fr] items-start">
 
-            {/* Profile Card */}
-            <Card className="rounded-3xl border-0 shadow-sm h-fit">
+            {/* Profile Card — hidden on mobile, use hamburger Profile tab instead */}
+            <Card className="hidden sm:block rounded-3xl border-0 shadow-sm h-fit">
               <CardHeader><CardTitle>Account</CardTitle></CardHeader>
               <CardContent className="space-y-4">
 <div className="flex flex-col items-center rounded-2xl bg-slate-100 dark:bg-zinc-900 p-6 text-center">
@@ -3154,6 +3200,7 @@ function openBoard(boardId: string, e?: React.MouseEvent<HTMLAnchorElement>, boa
               )}
 
             </div>
+          </div>
           </div>
         )}
 

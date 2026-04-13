@@ -3155,6 +3155,7 @@ function openBoard(boardId: string, e?: React.MouseEvent<HTMLAnchorElement>, boa
 
             </div>
           </div>
+          </>
         )}
 
         {/* Public Profile Modal */}

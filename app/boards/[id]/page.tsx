@@ -1369,7 +1369,7 @@ setFriendRequestSent("pending");
             Pinned
           </div>
         )}
-        <div className={`py-4 px-4 rounded-xl transition group ${comment.pinned && depth === 0 ? "bg-amber-50/50 dark:bg-sky-100/25" : ""} ${highlightedCommentId === comment.id ? "bg-slate-100 ring-2 ring-slate-300 dark:bg-slate-700 dark:ring-slate-500" : "hover:bg-slate-50 dark:hover:bg-gray-600"}`}>
+        <div className={`py-4 px-4 rounded-xl transition group ${comment.pinned && depth === 0 ? "bg-amber-50/50 dark:bg-sky-100" : ""} ${highlightedCommentId === comment.id ? "bg-slate-100 ring-2 ring-slate-300 dark:bg-slate-700 dark:ring-slate-500" : "hover:bg-slate-50 dark:hover:bg-gray-600"}`}>
           <div className="flex items-start gap-4">
             <button type="button" onClick={() => openProfile(profileId)} className="shrink-0">
               <Avatar className="h-9 w-9 overflow-hidden cursor-pointer transition hover:scale-105">
@@ -1442,12 +1442,13 @@ setFriendRequestSent("pending");
 
               {comment.media_url && (
                 comment.media_type === "video" ? (
-                  <div className="mt-3 overflow-hidden rounded-2xl border border-slate-200 bg-slate-900">
+                  <div className="mt-3 overflow-hidden rounded-2xl border border-slate-200 bg-slate-900 w-fit max-w-full">
                     <video
                       src={comment.media_url}
                       controls
-                      className="max-h-[480px] max-w-full"
+                      className="block max-h-[80vh] max-w-full"
                       preload="metadata"
+                      style={{ aspectRatio: "auto" }}
                     />
                   </div>
                 ) : (

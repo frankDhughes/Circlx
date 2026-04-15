@@ -1423,9 +1423,14 @@ setUnreadNotificationCount((notifCount ?? 0) + (mentionCount ?? 0));
   }, [profile]);
 
 const allTags = useMemo(() => {
-  const tagSet = new Set<string>();
-  publicBoards.forEach((b) => b.tags?.forEach((t) => tagSet.add(t)));
-  return Array.from(tagSet).sort();
+  const tagCount = new Map<string, number>();
+  publicBoards.forEach((b) => b.tags?.forEach((t) => {
+    tagCount.set(t, (tagCount.get(t) ?? 0) + 1);
+  }));
+  return Array.from(tagCount.entries())
+    .sort((a, b) => b[1] - a[1])
+    .slice(0, 10)
+    .map(([tag]) => tag);
 }, [publicBoards]);
 
 const sortedMyBoards = useMemo(() => {
